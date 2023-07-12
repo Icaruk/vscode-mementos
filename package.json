@@ -1,7 +1,7 @@
 {
   "name": "mementos",
   "displayName": "mementos",
-  "description": "",
+  "description": "Mementos is a VS Code extension that allows users to mark and navigate important areas, such as reminders or additional information, for improved code management and navigation. It enhances productivity by providing visual cues and easy access to tagged lines during code exploration.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.80.0"
