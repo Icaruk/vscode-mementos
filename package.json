@@ -16,10 +16,40 @@
   "contributes": {
     "commands": [
       {
-        "command": "mementos.helloWorld",
-        "title": "Hello World"
+        "command": "mementos.forceUpdate",
+        "title": "Mementos: force update"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mementos",
+          "title": "Mementos",
+          "icon": "src/icons/bookmark.svg"
+          
+        },
+        {
+					"id": "package-explorer",
+					"title": "Package Explorer",
+          "icon": "src/icons/bookmark.svg"
+				}
+      ]
+    },
+    "views": {
+      "mementos": [
+        {
+          "id": "mementos",
+          "name": "List"
+        }
+      ],
+      "package-explorer": [
+				{
+					"id": "nodeDependencies",
+					"name": "Node Dependencies",
+					"contextualTitle": "Package Explorer"
+				}
+			]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
