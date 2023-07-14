@@ -1,5 +1,7 @@
 # TODO
 
+
+- [ ] Debounce
 - [ ] Personalización marcas
   - [ ] Que el color por defecto sea personalizable
   - [ ] Que @mem (magicWord) sea personalizable
