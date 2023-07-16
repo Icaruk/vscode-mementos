@@ -3,11 +3,25 @@
   "displayName": "mementos",
   "description": "Mementos is a VS Code extension that ehances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.",
   "version": "0.0.1",
+  "publisher": "icaruk",
   "engines": {
     "vscode": "^1.80.0"
   },
   "categories": [
     "Other"
+  ],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "icon": "src/icons/logo.png",
+  "tags": [
+    "bookmark",
+    "jump",
+    "mark",
+    "cue",
+    "navigation",
+    "comment"
   ],
   "main": "./out/extension.js",
   "activationEvents": [

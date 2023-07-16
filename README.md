@@ -1,6 +1,6 @@
-![](https://i.gyazo.com/20c8a80cb2b408d23853a78368f66d4a.png)
+![](src\icons\logo.png)
 
-Mementos is a VS Code extension that ehances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.
+**Mementos** is a VS Code extension that ehances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.
 
 
 # Table of contents
@@ -9,10 +9,10 @@ Mementos is a VS Code extension that ehances productivity by providing visual cu
 
 # Features
 
-- 👁️ Provides visual cue for specific comments.
-- 🦘Sidebar view to jump between mementos on the active file.
-- 🗑️ Delete mementos with 1 click to keep your code clean.
-- ✅ Mementos are shared with your team because they are `//comments`.
+- 👁️ Provides **visual cue** for specific comments.
+- 🦘Sidebar view to **jump** between mementos on the active file.
+- 🗑️ Delete mementos with 1 click to keep your **code clean**.
+- ✅ Mementos are **shared with your team** because they are `//comments`.
 
 
  **Visual cues**
