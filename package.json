@@ -2,7 +2,7 @@
   "name": "mementos",
   "displayName": "mementos",
   "description": "Mementos is a VS Code extension that enhances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Icaruk/vscode-mementos"

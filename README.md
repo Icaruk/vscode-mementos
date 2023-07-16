@@ -2,10 +2,7 @@
 
 **Mementos** is a VS Code extension that ehances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.
 
-
-# Table of contents
-
-[TOC]
+![](https://i.gyazo.com/24d622ca990c4355ee0fe9e2db33fce0.gif)
 
 # Features
 
@@ -15,22 +12,27 @@
 - ✅ Mementos are **shared with your team** because they are `//comments`.
 
 
- **Visual cues**
+**Visual cues**
+
 ![](https://i.gyazo.com/5c456d33d01a756db72becbf495d9ffb.png)
 
 **Sidebar view**
+
 ![](https://i.gyazo.com/685615854e0312c527dbfde2fed21665.png)
 
 **Navigate with 1 click**
+
 ![](https://i.gyazo.com/a592f556328817affd7c9d8ee72bb73b.gif)
 
 **Colorizable mementos**
+
 > It can be disabled
-> 
+
 ![](https://i.gyazo.com/356ea1008e44ec8966081dfb154b7702.png)
 ![](https://i.gyazo.com/24e17192a24d5b05dd73beae1c0efff5.png)
 
 **Easy deletable**
+
 ![](https://i.gyazo.com/57e90b0b498aba237e535a5ae0419704.gif)
 
 
