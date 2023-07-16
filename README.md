@@ -1,4 +1,4 @@
-![](src\icons\logo.png)
+![](https://i.imgur.com/Ws1ObM4.png)
 
 **Mementos** is a VS Code extension that ehances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.
 

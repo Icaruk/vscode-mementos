@@ -1,8 +1,12 @@
 {
   "name": "mementos",
   "displayName": "mementos",
-  "description": "Mementos is a VS Code extension that ehances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.",
+  "description": "Mementos is a VS Code extension that enhances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Icaruk/vscode-mementos"
+  },
   "publisher": "icaruk",
   "engines": {
     "vscode": "^1.80.0"
@@ -14,7 +18,7 @@
     "ui",
     "workspace"
   ],
-  "icon": "src/icons/logo.png",
+  "icon": "logo.png",
   "tags": [
     "bookmark",
     "jump",
@@ -208,6 +212,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
+    "vsce:package": "vsce package",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
