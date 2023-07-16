@@ -48,6 +48,13 @@
 			]
     },
     "menus": {
+      "view/title": [
+				{
+					"command": "mementos.deleteMemento",
+					"when": "view == mementos",
+					"group": "navigation"
+				}
+      ],
       "view/item/context": [
         {
           "command": "mementos.deleteMemento",

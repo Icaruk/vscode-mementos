@@ -67,18 +67,12 @@ export class Memento extends vscode.TreeItem {
 		let tooltip = this.label;
 		if (this.description) {
 			tooltip += ` (${this.description.trim()})`;
-		}
+		};
 		
 		this.tooltip = tooltip;
 		this.iconPath = this.iconPath;
-
-		// Asignar el icono para cuando el ratón esté sobre el treeitem
-		this.iconPath = {
-			light: this.iconPath,
-			dark: this.iconPath,
-		};
 		
-	}
+	};
 	
 	command = {
 		command: MEMENTOS_ACTION_ITEM_CLICK,
