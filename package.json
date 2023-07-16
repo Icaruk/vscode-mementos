@@ -1,7 +1,7 @@
 {
   "name": "mementos",
   "displayName": "mementos",
-  "description": "Mementos is a VS Code extension that allows users to mark and navigate important areas, such as reminders or additional information, for improved code management and navigation. It enhances productivity by providing visual cues and easy access to tagged lines during code exploration.",
+  "description": "Mementos is a VS Code extension that ehances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.80.0"
@@ -18,37 +18,178 @@
       {
         "command": "mementos.forceUpdate",
         "title": "Mementos: force update"
+      },
+      {
+        "command": "mementos.deleteMemento",
+        "title": "Delete memento",
+        "icon": {
+          "light": "src/icons/light/delete.svg",
+          "dark": "src/icons/dark/delete.svg"
+        }
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "mementos",
-          "title": "Mementos",
-          "icon": "src/icons/bookmark.svg"
-          
-        },
-        {
-					"id": "package-explorer",
-					"title": "Package Explorer",
+					"id": "mementos",
+					"title": "Mementos",
           "icon": "src/icons/bookmark.svg"
 				}
       ]
     },
     "views": {
       "mementos": [
-        {
-          "id": "mementos",
-          "name": "List"
-        }
-      ],
-      "package-explorer": [
 				{
-					"id": "nodeDependencies",
-					"name": "Node Dependencies",
-					"contextualTitle": "Package Explorer"
+					"id": "allMementos",
+					"name": "All",
+					"contextualTitle": "All mementos",
+          "state": "default"
 				}
 			]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "mementos.deleteMemento",
+          "group": "inline",
+          "when": "view == mementos"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Mementos",
+      "properties": {
+        "mementos.comment.triggerWord": {
+          "type": "string",
+          "default": "@mem",
+          "description": "The trigger word that will determine if the comment is a memento. Default structure is: // @mem:title"
+        },
+        "mementos.comment.triggerWordSeparator": {
+          "type": "string",
+          "default": ":",
+          "description": "The separator between trigger word and title. Default structure is: // @mem:title"
+        },
+        "mementos.comment.colorizeComment": {
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether or not to colorize the memento text."
+        },
+        "mementos.gutter.defaultColor": {
+          "type": "string",
+          "default": "220,220,220",
+          "description": "Default RGB color for mementos that doesn't fit a text criteria. Default 220,220,220",
+          "pattern": "^(25[0-5]|2[0-4]\\d|1\\d\\d|\\d\\d?)(,(25[0-5]|2[0-4]\\d|1\\d\\d|\\d\\d?)){2}$",
+          "errorMessage": "Invalid RGB color. Please enter a valid RGB color in the format 'R,G,B', where R, G, and B are integers between 0 and 255.",
+          "examples": [
+            "11,11,11",
+            "125,125,125",
+            "255,255,255"
+          ]
+        },
+        "mementos.gutter.mementoTitles.red": {
+          "type": "array",
+          "default": ["red", "err", "del", "x", "!"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "mementos.gutter.mementoTitles.orange": {
+          "type": "array",
+          "default": ["orange", "todo", "to-do", "to_do"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "mementos.gutter.mementoTitles.yellow": {
+          "type": "array",
+          "default": ["yellow", "warn", "warning"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "mementos.gutter.mementoTitles.blue": {
+          "type": "array",
+          "default": ["blue", "bm", "book", "mark"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "mementos.gutter.mementoTitles.green": {
+          "type": "array",
+          "default": ["green", "ok", "done", "ready"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "mementos.gutter.mementoTitles.cyan": {
+          "type": "array",
+          "default": ["cyan", "*"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "mementos.gutter.mementoTitles.purple": {
+          "type": "array",
+          "default": ["purple"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "mementos.gutter.mementoTitles.pink": {
+          "type": "array",
+          "default": ["pink", ">", "<"],
+          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
+          "errorMessage": "Spaces are now allowed.",
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\s]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "capabilities": {
+    "virtualWorkspaces": true,
+    "untrustedWorkspaces": {
+      "supported": true
     }
   },
   "scripts": {

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Memento = exports.MementosProvider = void 0;
 const vscode = require("vscode");
-const path = require("path");
+const constants_1 = require("./utils/constants");
 class MementosProvider {
     constructor(allMementos) {
         this.allMementos = allMementos;
@@ -13,7 +13,7 @@ class MementosProvider {
     addMemento(memento) {
         this.allMementos.push(memento);
     }
-    clearmementos() {
+    clearMementos() {
         this.allMementos = [];
     }
     refresh() {
@@ -25,23 +25,36 @@ class MementosProvider {
     getChildren(element) {
         const childrens = [];
         for (let _memento of this.allMementos) {
-            childrens.push(new Memento(_memento, "soy una desc"));
+            childrens.push(new Memento(_memento.label, _memento.description, _memento.lineNumber, _memento.iconPath));
         }
         return childrens;
     }
 }
 exports.MementosProvider = MementosProvider;
 class Memento extends vscode.TreeItem {
-    constructor(label, description) {
+    constructor(label, description, lineNumber, iconPath) {
         super(label, vscode.TreeItemCollapsibleState.None);
         this.label = label;
         this.description = description;
-        this.iconPath = {
-            light: path.join(__filename, '..', '..', 'resources', 'light', 'dependency.svg'),
-            dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
+        this.lineNumber = lineNumber;
+        this.iconPath = iconPath;
+        this.command = {
+            command: constants_1.MEMENTOS_ACTION_ITEM_CLICK,
+            title: 'Click',
+            arguments: [this], // Pasa el Memento como argumento al comando onclick
         };
-        this.tooltip = `${this.label} - ${this.description}`;
+        let tooltip = this.label;
+        if (this.description) {
+            tooltip += ` (${this.description.trim()})`;
+        }
+        this.tooltip = tooltip;
+        this.iconPath = this.iconPath;
+        // Asignar el icono para cuando el ratón esté sobre el treeitem
+        this.iconPath = {
+            light: this.iconPath,
+            dark: this.iconPath,
+        };
     }
 }
 exports.Memento = Memento;
-//# sourceMappingURL=nodeDependencies.js.map
+//# sourceMappingURL=mementos.js.map
