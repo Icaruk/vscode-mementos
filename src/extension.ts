@@ -1,12 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { Color, DecorationRenderOptions, ExtensionContext, Position, QuickPickItem, Range, Selection, StatusBarAlignment, TextEditor, TextEditorDecorationType, TextEditorRevealType, Uri, commands, window, workspace } from "vscode";
+import { DecorationRenderOptions, ExtensionContext, Position, Range, Selection, TextEditor, TextEditorDecorationType, TextEditorRevealType, Uri, commands, window, workspace } from "vscode";
 import { MementosProvider } from "./mementos";
-import { getColorFromExtraText } from "./utils/getColorFromExtraText";
+import { MEMENTOS_ACTION_INSERT_MEMENTO, MEMENTOS_ACTION_ITEM_CLICK, MEMENTOS_ACTION_ITEM_DELETE } from './utils/constants';
 import { generateSvg } from "./utils/generateSvg";
-import {MEMENTOS_ACTION_ITEM_CLICK, MEMENTOS_ACTION_ITEM_DELETE} from './utils/constants';
+import { getColorFromExtraText } from "./utils/getColorFromExtraText";
 import { rgbToHex } from "./utils/rgbToHex";
-
 
 const allDecorators: TextEditorDecorationType[] = [];
 let mementosProvider: MementosProvider;
@@ -15,7 +14,7 @@ let mementosProvider: MementosProvider;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: ExtensionContext) {
-	// @mem:del
+	
 	let activeEditor = window.activeTextEditor;
 	
 	mementosProvider = new MementosProvider([]);
@@ -73,6 +72,48 @@ export function activate(context: ExtensionContext) {
 			});
 			
 		}
+	});
+	
+	commands.registerCommand(MEMENTOS_ACTION_INSERT_MEMENTO, (item) => {
+		
+		if (!activeEditor) {
+			return;
+		};
+		
+		// Get cursor position
+		const position = activeEditor.selection.active;
+		
+		// Get line text under cursor
+		const text = activeEditor.document.lineAt(position.line).text;
+		const isEmptyLine = text.trim().length === 0;
+		
+		const config = workspace.getConfiguration("mementos");
+		const triggerWord = config.get<string>("comment.triggerWord");
+		const separator = config.get<string>("comment.triggerWordSeparator");
+		
+		if (isEmptyLine) {
+			activeEditor.edit(editBuilder => {
+				if (activeEditor) {
+					editBuilder.insert(activeEditor.selection.active, `// ${triggerWord}${separator}`);
+				};
+			});
+		} else {
+			
+			// Place cursor at the end of the line
+			activeEditor.selection = new Selection(position, position);
+			
+			const lastPosition = new Position(
+				position.line,
+				text.length,
+			);
+			
+			// Edit line
+			activeEditor.edit(editBuilder => {
+				editBuilder.insert(lastPosition, ` // ${triggerWord}${separator}`);
+			});
+			
+		}
+		
 	});
 	
 	workspace.onDidChangeTextDocument((event) => {

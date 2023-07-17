@@ -5,16 +5,15 @@ exports.deactivate = exports.activate = void 0;
 // Import the module and reference it with the alias vscode in your code below
 const vscode_1 = require("vscode");
 const mementos_1 = require("./mementos");
-const getColorFromExtraText_1 = require("./utils/getColorFromExtraText");
-const generateSvg_1 = require("./utils/generateSvg");
 const constants_1 = require("./utils/constants");
+const generateSvg_1 = require("./utils/generateSvg");
+const getColorFromExtraText_1 = require("./utils/getColorFromExtraText");
 const rgbToHex_1 = require("./utils/rgbToHex");
 const allDecorators = [];
 let mementosProvider;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
-    // @mem:del
     let activeEditor = vscode_1.window.activeTextEditor;
     mementosProvider = new mementos_1.MementosProvider([]);
     vscode_1.window.registerTreeDataProvider('allMementos', mementosProvider);
@@ -55,6 +54,37 @@ function activate(context) {
                     editBuilder.delete(newSelection);
                 }
                 ;
+            });
+        }
+    });
+    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_INSERT_MEMENTO, (item) => {
+        if (!activeEditor) {
+            return;
+        }
+        ;
+        // Get cursor position
+        const position = activeEditor.selection.active;
+        // Get line text under cursor
+        const text = activeEditor.document.lineAt(position.line).text;
+        const isEmptyLine = text.trim().length === 0;
+        const config = vscode_1.workspace.getConfiguration("mementos");
+        const triggerWord = config.get("comment.triggerWord");
+        const separator = config.get("comment.triggerWordSeparator");
+        if (isEmptyLine) {
+            activeEditor.edit(editBuilder => {
+                if (activeEditor) {
+                    editBuilder.insert(activeEditor.selection.active, `// ${triggerWord}${separator}`);
+                }
+                ;
+            });
+        }
+        else {
+            // Place cursor at the end of the line
+            activeEditor.selection = new vscode_1.Selection(position, position);
+            const lastPosition = new vscode_1.Position(position.line, text.length);
+            // Edit line
+            activeEditor.edit(editBuilder => {
+                editBuilder.insert(lastPosition, ` // ${triggerWord}${separator}`);
             });
         }
     });
