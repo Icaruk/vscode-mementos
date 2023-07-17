@@ -18,8 +18,8 @@
     "ui",
     "workspace"
   ],
-  "icon": "icons/logo.png",
-  "tags": [
+  "icon": "logo.png",
+  "keywords": [
     "bookmark",
     "jump",
     "mark",
