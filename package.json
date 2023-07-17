@@ -18,7 +18,7 @@
     "ui",
     "workspace"
   ],
-  "icon": "logo.png",
+  "icon": "icons/logo.png",
   "keywords": [
     "bookmark",
     "jump",
