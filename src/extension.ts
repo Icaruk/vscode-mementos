@@ -15,9 +15,7 @@ let mementosProvider: MementosProvider;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: ExtensionContext) {
-
-	window.showInformationMessage('Mementos has been started');
-	
+	// @mem:del
 	let activeEditor = window.activeTextEditor;
 	
 	mementosProvider = new MementosProvider([]);

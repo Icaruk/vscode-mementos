@@ -14,7 +14,7 @@ let mementosProvider;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
-    vscode_1.window.showInformationMessage('Mementos has been started');
+    // @mem:del
     let activeEditor = vscode_1.window.activeTextEditor;
     mementosProvider = new mementos_1.MementosProvider([]);
     vscode_1.window.registerTreeDataProvider('allMementos', mementosProvider);
