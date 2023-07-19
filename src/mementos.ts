@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import {MEMENTOS_ACTION_ITEM_CLICK, MEMENTOS_ACTION_ITEM_DELETE} from './utils/constants';
+import { MEMENTOS_ACTION_TREEITEM_CLICK } from './utils/constants';
 
 
 
@@ -72,10 +72,12 @@ export class Memento extends vscode.TreeItem {
 		this.tooltip = tooltip;
 		this.iconPath = this.iconPath;
 		
+		// @mem:todo this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+		
 	};
 	
 	command = {
-		command: MEMENTOS_ACTION_ITEM_CLICK,
+		command: MEMENTOS_ACTION_TREEITEM_CLICK,
 		title: 'Click',
 		arguments: [this], // Pasa el Memento como argumento al comando onclick
 	};

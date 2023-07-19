@@ -39,7 +39,7 @@ class Memento extends vscode.TreeItem {
         this.lineNumber = lineNumber;
         this.iconPath = iconPath;
         this.command = {
-            command: constants_1.MEMENTOS_ACTION_ITEM_CLICK,
+            command: constants_1.MEMENTOS_ACTION_TREEITEM_CLICK,
             title: 'Click',
             arguments: [this], // Pasa el Memento como argumento al comando onclick
         };
@@ -50,6 +50,7 @@ class Memento extends vscode.TreeItem {
         ;
         this.tooltip = tooltip;
         this.iconPath = this.iconPath;
+        // @mem:todo this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
     }
     ;
 }
