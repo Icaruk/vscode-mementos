@@ -1,7 +1,7 @@
 import { workspace } from "vscode";
 import { getTextColorForBackground } from "./getTextColorForBackground";
 import { getSemanticColor, semanticColors } from "./semanticColors";
-import { stringIncludes } from "./stringIncludes";
+import { stringIncludes } from "../stringIncludes";
 
 export const getColorFromExtraText = (text: string): { fillRgb: string; textRgb: string; } => {
 	

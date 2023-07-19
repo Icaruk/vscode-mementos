@@ -2,10 +2,13 @@
 // Import the module and reference it with the alias vscode in your code below
 import { DecorationRenderOptions, ExtensionContext, Position, Range, Selection, TextEditor, TextEditorDecorationType, TextEditorRevealType, Uri, commands, window, workspace } from "vscode";
 import { MementosProvider } from "./mementos";
-import { MEMENTOS_ACTION_INSERT_MEMENTO, MEMENTOS_ACTION_ITEM_CLICK, MEMENTOS_ACTION_ITEM_DELETE } from './utils/constants';
+import { getColorFromExtraText } from "./utils/colors/getColorFromExtraText";
+import { rgbToHex } from "./utils/colors/rgbToHex";
+import { MEMENTOS_ACTION_DELETE_MEMENTO, MEMENTOS_ACTION_INSERT_MEMENTO, MEMENTOS_ACTION_INSERT_MEMENTO_AT_TOP, MEMENTOS_ACTION_TOGGLE_MEMENTO, MEMENTOS_ACTION_TREEITEM_CLICK, MEMENTOS_ACTION_TREEITEM_DELETE } from './utils/constants';
+import { deleteMementoFromLine } from "./utils/deleteMementoFromLine";
 import { generateSvg } from "./utils/generateSvg";
-import { getColorFromExtraText } from "./utils/getColorFromExtraText";
-import { rgbToHex } from "./utils/rgbToHex";
+import { getMementoComponents } from "./utils/getMementoComponents";
+import { insertMementoIntoLine } from "./utils/insertMementoIntoLine";
 
 const allDecorators: TextEditorDecorationType[] = [];
 let mementosProvider: MementosProvider;
@@ -20,7 +23,7 @@ export function activate(context: ExtensionContext) {
 	mementosProvider = new MementosProvider([]);
 	window.registerTreeDataProvider('allMementos', mementosProvider);
 	
-	commands.registerCommand(MEMENTOS_ACTION_ITEM_CLICK, (item) => {
+	commands.registerCommand(MEMENTOS_ACTION_TREEITEM_CLICK, (item) => {
 		
 		// Get position where the cursor should move to
 		const position = new Position(item.lineNumber - 1, 0);
@@ -36,7 +39,7 @@ export function activate(context: ExtensionContext) {
 		
 	});
 	
-	commands.registerCommand(MEMENTOS_ACTION_ITEM_DELETE, (item) => {
+	commands.registerCommand(MEMENTOS_ACTION_TREEITEM_DELETE, (item) => {
 		
 		if (activeEditor) {
 			// Get line text
@@ -74,7 +77,50 @@ export function activate(context: ExtensionContext) {
 		}
 	});
 	
-	commands.registerCommand(MEMENTOS_ACTION_INSERT_MEMENTO, (item) => {
+	commands.registerCommand(MEMENTOS_ACTION_INSERT_MEMENTO, () => {
+		
+		if (!activeEditor) {
+			return;
+		};
+		
+		insertMementoIntoLine({
+			activeEditor
+		});
+		
+	});
+	
+	commands.registerCommand(MEMENTOS_ACTION_INSERT_MEMENTO_AT_TOP, () => {
+		
+		if (!activeEditor) {
+			return;
+		};
+		
+		const config = workspace.getConfiguration("mementos");
+		const triggerWord = config.get<string>("comment.triggerWord");
+		const separator = config.get<string>("comment.triggerWordSeparator");
+		
+		const position = new Position(0, 0);
+		
+		// Edit line
+		activeEditor.edit(editBuilder => {
+			editBuilder.insert(position, `// ${triggerWord}${separator}\n`);
+		});
+		
+	});
+	
+	commands.registerCommand(MEMENTOS_ACTION_DELETE_MEMENTO, () => {
+		
+		if (!activeEditor) {
+			return;
+		};
+		
+		deleteMementoFromLine({
+			activeEditor,
+		});
+		
+	});
+	
+	commands.registerCommand(MEMENTOS_ACTION_TOGGLE_MEMENTO, () => {
 		
 		if (!activeEditor) {
 			return;
@@ -85,34 +131,18 @@ export function activate(context: ExtensionContext) {
 		
 		// Get line text under cursor
 		const text = activeEditor.document.lineAt(position.line).text;
-		const isEmptyLine = text.trim().length === 0;
 		
-		const config = workspace.getConfiguration("mementos");
-		const triggerWord = config.get<string>("comment.triggerWord");
-		const separator = config.get<string>("comment.triggerWordSeparator");
+		const {isMemento} = getMementoComponents(text);
 		
-		if (isEmptyLine) {
-			activeEditor.edit(editBuilder => {
-				if (activeEditor) {
-					editBuilder.insert(activeEditor.selection.active, `// ${triggerWord}${separator}`);
-				};
+		if (isMemento) {
+			deleteMementoFromLine({
+				activeEditor,
 			});
 		} else {
-			
-			// Place cursor at the end of the line
-			activeEditor.selection = new Selection(position, position);
-			
-			const lastPosition = new Position(
-				position.line,
-				text.length,
-			);
-			
-			// Edit line
-			activeEditor.edit(editBuilder => {
-				editBuilder.insert(lastPosition, ` // ${triggerWord}${separator}`);
+			insertMementoIntoLine({
+				activeEditor
 			});
-			
-		}
+		};
 		
 	});
 	
@@ -170,13 +200,8 @@ function updateDecorations(editor: TextEditor | undefined) {
 		
 		const commentIndex = lineText.indexOf("//");
 		
-		// Check regex if line includes --> // magicWord:title description
-		const regex = new RegExp(`\/\/ ?(${triggerWord})${separator}?([^\s ]*)\s?(.*)`, "gm");
-		const match = regex.exec(lineText);
 		
-		const magicWord = match?.[1] ?? "";
-		const title = match?.[2] ?? "";
-		const description = match?.[3] ?? "";
+		const {isMemento, title, description} = getMementoComponents(lineText);
 		
 		let firstTitleChar = "";
 		let fillRgb = "";
@@ -188,9 +213,9 @@ function updateDecorations(editor: TextEditor | undefined) {
 			const colors = getColorFromExtraText(title);
 			fillRgb = colors.fillRgb;
 			textRgb = colors.textRgb;
-		}
+		};
 		
-		if (magicWord === triggerWord) {
+		if (isMemento) {
 			
 			const svg = generateSvg({
 				text: firstTitleChar ?? "",
@@ -223,14 +248,13 @@ function updateDecorations(editor: TextEditor | undefined) {
 			]);
 			
 			allDecorators.push(decType);
-		}
-		
+		};
 		
 	}
 	
 	mementosProvider.refresh();
 	
-}
+};
 
 
 export function deactivate() {}

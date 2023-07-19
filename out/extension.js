@@ -5,10 +5,13 @@ exports.deactivate = exports.activate = void 0;
 // Import the module and reference it with the alias vscode in your code below
 const vscode_1 = require("vscode");
 const mementos_1 = require("./mementos");
+const getColorFromExtraText_1 = require("./utils/colors/getColorFromExtraText");
+const rgbToHex_1 = require("./utils/colors/rgbToHex");
 const constants_1 = require("./utils/constants");
+const deleteMementoFromLine_1 = require("./utils/deleteMementoFromLine");
 const generateSvg_1 = require("./utils/generateSvg");
-const getColorFromExtraText_1 = require("./utils/getColorFromExtraText");
-const rgbToHex_1 = require("./utils/rgbToHex");
+const getMementoComponents_1 = require("./utils/getMementoComponents");
+const insertMementoIntoLine_1 = require("./utils/insertMementoIntoLine");
 const allDecorators = [];
 let mementosProvider;
 // This method is called when your extension is activated
@@ -17,7 +20,7 @@ function activate(context) {
     let activeEditor = vscode_1.window.activeTextEditor;
     mementosProvider = new mementos_1.MementosProvider([]);
     vscode_1.window.registerTreeDataProvider('allMementos', mementosProvider);
-    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_ITEM_CLICK, (item) => {
+    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_TREEITEM_CLICK, (item) => {
         // Get position where the cursor should move to
         const position = new vscode_1.Position(item.lineNumber - 1, 0);
         if (activeEditor) {
@@ -28,7 +31,7 @@ function activate(context) {
             activeEditor.revealRange(newSelection, vscode_1.TextEditorRevealType.InCenter);
         }
     });
-    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_ITEM_DELETE, (item) => {
+    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_TREEITEM_DELETE, (item) => {
         if (activeEditor) {
             // Get line text
             const text = activeEditor.document.lineAt(item.lineNumber - 1).text;
@@ -57,7 +60,39 @@ function activate(context) {
             });
         }
     });
-    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_INSERT_MEMENTO, (item) => {
+    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_INSERT_MEMENTO, () => {
+        if (!activeEditor) {
+            return;
+        }
+        ;
+        (0, insertMementoIntoLine_1.insertMementoIntoLine)({
+            activeEditor
+        });
+    });
+    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_INSERT_MEMENTO_AT_TOP, () => {
+        if (!activeEditor) {
+            return;
+        }
+        ;
+        const config = vscode_1.workspace.getConfiguration("mementos");
+        const triggerWord = config.get("comment.triggerWord");
+        const separator = config.get("comment.triggerWordSeparator");
+        const position = new vscode_1.Position(0, 0);
+        // Edit line
+        activeEditor.edit(editBuilder => {
+            editBuilder.insert(position, `// ${triggerWord}${separator}\n`);
+        });
+    });
+    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_DELETE_MEMENTO, () => {
+        if (!activeEditor) {
+            return;
+        }
+        ;
+        (0, deleteMementoFromLine_1.deleteMementoFromLine)({
+            activeEditor,
+        });
+    });
+    vscode_1.commands.registerCommand(constants_1.MEMENTOS_ACTION_TOGGLE_MEMENTO, () => {
         if (!activeEditor) {
             return;
         }
@@ -66,27 +101,18 @@ function activate(context) {
         const position = activeEditor.selection.active;
         // Get line text under cursor
         const text = activeEditor.document.lineAt(position.line).text;
-        const isEmptyLine = text.trim().length === 0;
-        const config = vscode_1.workspace.getConfiguration("mementos");
-        const triggerWord = config.get("comment.triggerWord");
-        const separator = config.get("comment.triggerWordSeparator");
-        if (isEmptyLine) {
-            activeEditor.edit(editBuilder => {
-                if (activeEditor) {
-                    editBuilder.insert(activeEditor.selection.active, `// ${triggerWord}${separator}`);
-                }
-                ;
+        const { isMemento } = (0, getMementoComponents_1.getMementoComponents)(text);
+        if (isMemento) {
+            (0, deleteMementoFromLine_1.deleteMementoFromLine)({
+                activeEditor,
             });
         }
         else {
-            // Place cursor at the end of the line
-            activeEditor.selection = new vscode_1.Selection(position, position);
-            const lastPosition = new vscode_1.Position(position.line, text.length);
-            // Edit line
-            activeEditor.edit(editBuilder => {
-                editBuilder.insert(lastPosition, ` // ${triggerWord}${separator}`);
+            (0, insertMementoIntoLine_1.insertMementoIntoLine)({
+                activeEditor
             });
         }
+        ;
     });
     vscode_1.workspace.onDidChangeTextDocument((event) => {
         if (activeEditor && event.document === activeEditor.document) {
@@ -128,12 +154,7 @@ function updateDecorations(editor) {
         const line = document.lineAt(lineNumber);
         const lineText = line.text;
         const commentIndex = lineText.indexOf("//");
-        // Check regex if line includes --> // magicWord:title description
-        const regex = new RegExp(`\/\/ ?(${triggerWord})${separator}?([^\s ]*)\s?(.*)`, "gm");
-        const match = regex.exec(lineText);
-        const magicWord = match?.[1] ?? "";
-        const title = match?.[2] ?? "";
-        const description = match?.[3] ?? "";
+        const { isMemento, title, description } = (0, getMementoComponents_1.getMementoComponents)(lineText);
         let firstTitleChar = "";
         let fillRgb = "";
         let textRgb = "";
@@ -143,7 +164,8 @@ function updateDecorations(editor) {
             fillRgb = colors.fillRgb;
             textRgb = colors.textRgb;
         }
-        if (magicWord === triggerWord) {
+        ;
+        if (isMemento) {
             const svg = (0, generateSvg_1.generateSvg)({
                 text: firstTitleChar ?? "",
                 fillRgb: fillRgb,
@@ -172,9 +194,11 @@ function updateDecorations(editor) {
             ]);
             allDecorators.push(decType);
         }
+        ;
     }
     mementosProvider.refresh();
 }
+;
 function deactivate() { }
 exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map

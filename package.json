@@ -2,7 +2,7 @@
   "name": "mementos",
   "displayName": "mementos",
   "description": "Mementos is a VS Code extension that enhances productivity by providing visual cues and easy navigation to important areas with specific and configurable comments.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/Icaruk/vscode-mementos"
@@ -43,11 +43,24 @@
         "icon": {
           "light": "icons/light/delete.svg",
           "dark": "icons/dark/delete.svg"
-        }
+        },
+        "enablement": "view == allMementos"
       },
       {
         "command": "mementos.insertMemento",
         "title": "[Mementos] Insert memento"
+      },
+      {
+        "command": "mementos.insertMementoAtTop",
+        "title": "[Mementos] Insert memento at top"
+      },
+      {
+        "command": "mementos.deleteMemento",
+        "title": "[Mementos] Delete memento"
+      },
+      {
+        "command": "mementos.toggleMemento",
+        "title": "[Mementos] Toggle memento"
       }
     ],
     "viewsContainers": {
