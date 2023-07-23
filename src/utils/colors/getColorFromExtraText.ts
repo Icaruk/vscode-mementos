@@ -3,7 +3,7 @@ import { getTextColorForBackground } from "./getTextColorForBackground";
 import { getSemanticColor, semanticColors } from "./semanticColors";
 import { stringIncludes } from "../stringIncludes";
 
-export const getColorFromExtraText = (text: string): { fillRgb: string; textRgb: string; } => {
+export const getColorFromExtraText = (text: string): { fillRgb: string; textRgb: string; id: string } => {
 	
 	const config = workspace.getConfiguration("mementos");
 	const defaultColor = config.get<string>("gutter.defaultColor") ?? "11,11,11";
@@ -11,6 +11,7 @@ export const getColorFromExtraText = (text: string): { fillRgb: string; textRgb:
 	const colors = {
 		fillRgb: defaultColor,
 		textRgb: "255,255,255",
+		id: "",
 	};
 	
 	for (let _colorKey in semanticColors) {
@@ -19,6 +20,7 @@ export const getColorFromExtraText = (text: string): { fillRgb: string; textRgb:
 		
 		if (stringIncludes(text, wordList)) {
 			colors.fillRgb = rgb;
+			colors.id = _colorKey;
 			break;
 		};
 	};

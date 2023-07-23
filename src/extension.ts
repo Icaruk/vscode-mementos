@@ -20,7 +20,7 @@ export function activate(context: ExtensionContext) {
 	
 	let activeEditor = window.activeTextEditor;
 	
-	mementosProvider = new MementosProvider([]);
+	mementosProvider = new MementosProvider();
 	window.registerTreeDataProvider('allMementos', mementosProvider);
 	
 	commands.registerCommand(MEMENTOS_ACTION_TREEITEM_CLICK, (item) => {
@@ -182,8 +182,6 @@ function updateDecorations(editor: TextEditor | undefined) {
 	
 	// Get config "mementos.comment.triggerWord"
 	const config = workspace.getConfiguration("mementos");
-	const triggerWord = config.get<string>("comment.triggerWord");
-	const separator = config.get<string>("comment.triggerWordSeparator");
 	const colorizeComment = config.get<boolean>("comment.colorizeComment");
 	
 	// Remove all decorations
@@ -206,6 +204,7 @@ function updateDecorations(editor: TextEditor | undefined) {
 		let firstTitleChar = "";
 		let fillRgb = "";
 		let textRgb = "";
+		let colorId = "";
 		
 		if (title) {
 			firstTitleChar = title.slice(0, 1).toUpperCase();
@@ -213,6 +212,7 @@ function updateDecorations(editor: TextEditor | undefined) {
 			const colors = getColorFromExtraText(title);
 			fillRgb = colors.fillRgb;
 			textRgb = colors.textRgb;
+			colorId = colors.id;
 		};
 		
 		if (isMemento) {
@@ -235,9 +235,11 @@ function updateDecorations(editor: TextEditor | undefined) {
 			const decType = window.createTextEditorDecorationType(decOptions);
 			
 			mementosProvider.addMemento({
+				id: colorId,
 				label: title,
 				description: description,
 				lineNumber: lineNumber + 1,
+				filePath: document.fileName,
 				iconPath: iconPath
 			});
 			

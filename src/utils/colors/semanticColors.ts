@@ -31,10 +31,6 @@ export const semanticColors: MementoColors = {
 		rgb: "66,214,164",
 		wordList: ["ok", "done", "ready"],
 	},
-	cyan: {
-		rgb: "8,202,209",
-		wordList: ["*"],
-	},
 	purple: {
 		rgb: "157,148,255",
 		wordList: ["*"],

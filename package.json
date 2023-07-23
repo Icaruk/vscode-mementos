@@ -76,8 +76,8 @@
       "mementos": [
         {
           "id": "allMementos",
-          "name": "All",
-          "contextualTitle": "All mementos",
+          "name": "Mementos",
+          "contextualTitle": "Mementos",
           "state": "default"
         }
       ]
@@ -128,7 +128,6 @@
             "red",
             "err",
             "del",
-            "x",
             "!"
           ],
           "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
@@ -197,21 +196,6 @@
             "ok",
             "done",
             "ready"
-          ],
-          "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
-          "errorMessage": "Spaces are now allowed.",
-          "items": {
-            "type": "string",
-            "pattern": "^[^\\s]+$"
-          },
-          "minItems": 1,
-          "uniqueItems": true
-        },
-        "mementos.gutter.mementoTitles.cyan": {
-          "type": "array",
-          "default": [
-            "cyan",
-            "*"
           ],
           "description": "A list of trigger words. When any of these words is found in a memento, it will become of this color.",
           "errorMessage": "Spaces are now allowed.",
