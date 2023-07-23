@@ -87,7 +87,7 @@
         {
           "command": "mementos.deleteMementoFromTreeItem",
           "group": "inline",
-          "when": "view == allMementos"
+          "when": "view == allMementos && !treeElementCanExpand"
         }
       ]
     },
