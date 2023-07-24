@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { DecorationRenderOptions, ExtensionContext, Position, Range, Selection, TextEditor, TextEditorDecorationType, TextEditorRevealType, Uri, commands, window, workspace } from "vscode";
-import { MementosProvider } from "./mementos";
+import { Category, MementosProvider } from "./mementos";
 import { getColorFromExtraText } from "./utils/colors/getColorFromExtraText";
 import { rgbToHex } from "./utils/colors/rgbToHex";
 import { MEMENTOS_ACTION_DELETE_MEMENTO, MEMENTOS_ACTION_INSERT_MEMENTO, MEMENTOS_ACTION_INSERT_MEMENTO_AT_TOP, MEMENTOS_ACTION_TOGGLE_MEMENTO, MEMENTOS_ACTION_TREEITEM_CLICK, MEMENTOS_ACTION_TREEITEM_DELETE } from './utils/constants';
@@ -40,6 +40,10 @@ export function activate(context: ExtensionContext) {
 	});
 	
 	commands.registerCommand(MEMENTOS_ACTION_TREEITEM_DELETE, (item) => {
+		
+		if (item instanceof Category) {
+			return;
+		};
 		
 		if (activeEditor) {
 			// Get line text
