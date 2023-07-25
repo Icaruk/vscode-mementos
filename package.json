@@ -2,7 +2,7 @@
   "name": "mementos",
   "displayName": "mementos",
   "description": "Mementos is a VS Code extension that enhances productivity by providing visual cues and easy navigation to your important areas with specific and configurable comments.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Icaruk/vscode-mementos"
@@ -109,6 +109,16 @@
           "type": "boolean",
           "default": "true",
           "description": "Whether or not to colorize the memento text."
+        },
+        "mementos.actions.insertMementoWithContext": {
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether or not to add context when inserting a memento."
+        },
+        "mementos.actions.defaultContextTitle": {
+          "type": "string",
+          "default": "bm",
+          "description": "Default title that will be placed in mementos with context."
         },
         "mementos.gutter.defaultColor": {
           "type": "string",

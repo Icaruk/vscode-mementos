@@ -35,38 +35,10 @@
 
 ![](https://i.imgur.com/kjjgwUZ.gif)
 
+**Automatic context**
+![](https://i.imgur.com/A2naXtZ.gif)
 
-
-# Extension Settings
-
-This extension contributes the following settings:
-
-- `mementos.comment.triggerWord`: The trigger word that determines if the comment is a memento. 
-	> The default structure is: `// <triggerWord><separator><title>`.
-
-- `mementos.comment.triggerWordSeparator`: The separator between the trigger word and the title.
-	> The default structure is: `// <triggerWord><separator><title>`.
-
-- `mementos.comment.colorizeComment`: Whether or not to colorize the memento text. Default is `true`.
- 
-- `mementos.gutter.defaultColor`: Default RGB color for mementos that don't fit a text criteria. Default is `220,220,220`. The color should be in the format 'R,G,B', where R, G, and B are integers between 0 and 255.
- 
-- `mementos.gutter.mementoTitles.red`: A list of trigger words. When any of these words is found in a memento, it will become red.
- 
-- `mementos.gutter.mementoTitles.orange`: A list of trigger words. When any of these words is found in a memento, it will become orange.
- 
-- `mementos.gutter.mementoTitles.yellow`: A list of trigger words. When any of these words is found in a memento, it will become yellow.
- 
-- `mementos.gutter.mementoTitles.blue`: A list of trigger words. When any of these words is found in a memento, it will become blue.
- 
-- `mementos.gutter.mementoTitles.green`: A list of trigger words. When any of these words is found in a memento, it will become green.
-  
-- `mementos.gutter.mementoTitles.purple`: A list of trigger words. When any of these words is found in a memento, it will become purple.
-  
-- `mementos.gutter.mementoTitles.pink`: A list of trigger words. When any of these words is found in a memento, it will become pink.
-
-
-These settings allow you to customize the appearance and behavior of the Mementos extension according to your preferences. You can modify these values from your editor's settings to adjust the extension's functionality.
+---
 
 # Known Issues
 
