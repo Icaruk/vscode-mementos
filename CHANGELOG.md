@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Inserting a memento can get context from the above or below lines.
+  ![](https://i.imgur.com/A2naXtZ.gif)
   - This behavior is enabled by default and can be changed with `mementos.actions.insertMementoWithContext`.
   - Default title is `bm` and can be changed with `mementos.actions.defaultContextTitle`.
   - Examples:
