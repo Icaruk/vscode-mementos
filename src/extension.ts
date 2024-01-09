@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { DecorationRenderOptions, ExtensionContext, Position, Range, Selection, TextEditor, TextEditorDecorationType, TextEditorRevealType, Uri, commands, window, workspace } from "vscode";
+import { DecorationRenderOptions, ExtensionContext, FileType, Position, Range, Selection, TextEditor, TextEditorDecorationType, TextEditorRevealType, Uri, WorkspaceFolder, commands, window, workspace } from "vscode";
 import { Category, MementosProvider } from "./mementos";
 import { getColorFromExtraText } from "./utils/colors/getColorFromExtraText";
 import { rgbToHex } from "./utils/colors/rgbToHex";
@@ -163,6 +163,8 @@ export function activate(context: ExtensionContext) {
 	});
 	
 	updateDecorations(activeEditor);
+	getWorkspaceMementos(workspace);
+	
 	
 	
 	
@@ -191,6 +193,125 @@ function updateDecorations(editor: TextEditor | undefined) {
 	// Remove all decorations
 	allDecorators.forEach(decType => editor.setDecorations(decType, []));
 	mementosProvider.clearMementos();
+	
+	// Start
+	const document = editor.document;
+	const lineCount = document.lineCount;
+	
+	for (let lineNumber = 0; lineNumber < lineCount; lineNumber++) {
+		const line = document.lineAt(lineNumber);
+		const lineText = line.text;
+		
+		const commentIndex = lineText.indexOf("//");
+		
+		
+		const {isMemento, title, description} = getMementoComponents(lineText);
+		
+		let firstTitleChar = "";
+		let fillRgb = "";
+		let textRgb = "";
+		let colorId = "";
+		
+		if (title) {
+			firstTitleChar = title.slice(0, 1).toUpperCase();
+			
+			const colors = getColorFromExtraText(title);
+			fillRgb = colors.fillRgb;
+			textRgb = colors.textRgb;
+			colorId = colors.id;
+		};
+		
+		if (isMemento) {
+			
+			const svg = generateSvg({
+				text: firstTitleChar ?? "",
+				fillRgb: fillRgb,
+				textRgb: textRgb,
+			});
+			const iconPath = getIconPath(svg);
+			
+			const decOptions: DecorationRenderOptions = {
+				gutterIconPath: iconPath,
+				gutterIconSize: "auto",
+			};
+			if (colorizeComment) {
+				decOptions.color = rgbToHex(fillRgb);
+			};
+			
+			const decType = window.createTextEditorDecorationType(decOptions);
+			
+			mementosProvider.addMemento({
+				id: colorId,
+				label: title,
+				description: description,
+				lineNumber: lineNumber + 1,
+				filePath: document.fileName,
+				iconPath: iconPath
+			});
+			
+			editor.setDecorations(decType, [
+				{
+					range: new Range(lineNumber, commentIndex, lineNumber, lineText.length),
+				},
+			]);
+			
+			allDecorators.push(decType);
+		};
+		
+	}
+	
+	mementosProvider.refresh();
+	
+};
+
+function getIconPath(svg: string) {
+	return Uri.parse(`data:image/svg+xml,${encodeURIComponent(svg)}`);
+}
+
+function readFolderRecursive(uri: Uri) {
+    workspace.fs.readDirectory(uri).then(_directories => {
+        _directories.forEach(_directory => {
+            const [name, type] = _directory;
+            const entryUri = Uri.joinPath(uri, name);
+
+            if (type === FileType.Directory) {
+                // Si es una carpeta, seguimos leyendo su contenido recursivamente
+                readFolderRecursive(entryUri);
+            } else if (type === FileType.File) {
+                // Si es un archivo, leemos su contenido línea por línea
+                readLinesFromFile(entryUri);
+				
+            }
+        });
+    });
+}
+
+function readLinesFromFile(uri: Uri) {
+    workspace.fs.readFile(uri).then(content => {
+        // El contenido del archivo es un Buffer, así que lo convertimos a texto
+        const text = content.toString();
+        const lines = text.split(/\r?\n/);
+        lines.forEach(line => {
+            // Aquí puedes procesar cada línea como desees
+            console.log(line);
+        });
+    });
+}
+
+function getWorkspaceMementos() {
+	
+	// Obtenemos el primer workspace
+	const workspaceFolders = workspace.workspaceFolders;
+	if (!workspaceFolders || workspaceFolders.length === 0) {
+		return;
+	}
+	
+	const workspaceFolder = workspaceFolders[0];
+	readFolderRecursive(workspaceFolder.uri);
+	
+	
+	
+	return;
 	
 	// Start
 	const document = editor.document;
