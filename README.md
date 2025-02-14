@@ -4,12 +4,14 @@
 
 ![](https://i.gyazo.com/24d622ca990c4355ee0fe9e2db33fce0.gif)
 
+[TOC]
+
 # Features
 
 - 👁️ Provides **visual cue** for specific comments.
 - 🦘Sidebar view to **jump** between mementos on the active file.
 - 🗑️ Delete mementos with 1 click to keep your **code clean**.
-- ✅ Mementos are **shared with your team** because they are `//comments`.
+- ✅ Mementos are **shared with your team** because they are `// comments`.
 
 
 **Visual cues**
@@ -38,8 +40,9 @@
 **Automatic context**
 ![](https://i.imgur.com/A2naXtZ.gif)
 
----
 
-# Known Issues
+# Compatibility with [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
 
-.
+- Set [mementos.comment.triggerWord](vscode://settings/mementos.comment.triggerWord) to empty string.
+
+![](https://i.imgur.com/RI8CJCg.png)

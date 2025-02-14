@@ -2,12 +2,12 @@ import { workspace } from "vscode";
 
 export interface MementoColors {
 	[key: string]: MementoColor;
-};
+}
 
 export interface MementoColor {
 	rgb: string;
 	wordList: string[];
-};
+}
 
 // https://colorswall.com/es/palette/171299
 export const semanticColors: MementoColors = {
@@ -38,16 +38,18 @@ export const semanticColors: MementoColors = {
 	pink: {
 		rgb: "199,128,232",
 		wordList: ["pink", ">", "<"],
-	}
+	},
 };
 
 export function getSemanticColor(color: string): MementoColor {
-	const wordListFromConfig = workspace.getConfiguration("mementos").get<string[]>(`gutter.mementoTitles.${color}`);
-	
+	const wordListFromConfig = workspace
+		.getConfiguration("mementos")
+		.get<string[]>(`gutter.mementoTitles.${color}`);
+
 	const semanticColor = semanticColors[color];
 	if (wordListFromConfig?.length) {
 		semanticColor.wordList = wordListFromConfig;
-	};
-	
+	}
+
 	return semanticColor;
 }

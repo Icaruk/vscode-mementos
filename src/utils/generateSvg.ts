@@ -1,5 +1,7 @@
 export const generateSvg = ({
-	text, fillRgb = "25,25,25", textRgb = "255,255,255",
+	text,
+	fillRgb = "25,25,25",
+	textRgb = "255,255,255",
 }: {
 	text: string;
 	fillRgb?: string;
