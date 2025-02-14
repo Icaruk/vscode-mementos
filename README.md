@@ -41,7 +41,9 @@
 
 # Compatibility with [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
 
-- Set <a href="vscode://settings/mementos.comment.triggerWord">mementos.comment.triggerWord</a> to a single space ` `.
-- Set [mementos.comment.triggerWordSeparator](vscode://settings/mementos.comment.triggerWordSeparator) to empty string.
+In settings:
+
+- Set `mementos.comment.triggerWord` to a single space ` `.
+- Set `mementos.comment.triggerWordSeparator` to empty string.
 
 ![](https://i.imgur.com/RI8CJCg.png)
