@@ -4,8 +4,6 @@
 
 ![](https://i.gyazo.com/24d622ca990c4355ee0fe9e2db33fce0.gif)
 
-[TOC]
-
 # Features
 
 - 👁️ Provides **visual cue** for specific comments.
