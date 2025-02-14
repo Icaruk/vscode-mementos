@@ -10,6 +10,7 @@
 - 🦘Sidebar view to **jump** between mementos on the active file.
 - 🗑️ Delete mementos with 1 click to keep your **code clean**.
 - ✅ Mementos are **shared with your team** because they are `// comments`.
+- ⚙️ Customizable triggers. You can use `// @mem:warning`, `// @@ warning`, `// warning` or whatever you want.
 
 
 **Visual cues**
